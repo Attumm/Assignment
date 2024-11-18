@@ -3,6 +3,7 @@
 This FastAPI-based service provides random quotes through a high-performance API endpoint. It asynchronously fetches data from multiple providers and offers responses in JSON, XML, HTML, and plain text formats. The service employs a background worker system that maintains a preloaded queue of quotes for optimal performance, falling back to predefined quotes if needed.
 The application was designed with edge computing in mind, prioritizing response times by minimizing connection and memory overhead. Built using FastAPI and Python's async, with a extensible architecture that allows for new quote providers.
 
+
 ### To to run
 Running the code it's under the scripts directory.
 the goal was for commit hooks, but it became handy tool to allow formatter, linter, tests to run.
@@ -14,6 +15,23 @@ bash script/start.sh
 bash script/linters.sh
 bash script/fomatter.sh
 bash script/tests.sh
+```
+
+### linters
+The project uses the follow linters, the downside is that those linters download a ton of different packages.
+Didn't have time to seperate the linting and build packages.
+```bash
+# Type Check
+python -m mypy --strict src
+
+# Doctype Check
+darglint src/quote/
+
+# Multiple linters
+python -m pylama -i E501,E231 src
+
+# Security Check
+bandit -r src/quote
 ```
 
 ### Run the app with docker
