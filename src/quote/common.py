@@ -6,7 +6,6 @@ import httpx
 
 from .models import DataProvider
 
-
 logger = logging.getLogger(__name__)
 
 

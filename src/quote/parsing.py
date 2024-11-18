@@ -3,6 +3,18 @@ from typing import Any
 from .models import Quote
 
 
+class BaseQuoteException(Exception):
+    pass
+
+
+class UnableToParse(BaseQuoteException):
+    pass
+
+
+class InvalidQuote(BaseQuoteException):
+    pass
+
+
 def provider_quotable_parsing(data: dict[str, Any]) -> Quote:
     """
     Parse data from quotable service into a Quote object.
@@ -64,6 +76,22 @@ PARSERS = {
 }
 
 
+def validate(quote: Quote) -> None:
+    """
+    Validate quotes very small because of time pressure.
+
+    Currenlty only checks if `Too many requests` is in the quote.
+
+    Args:
+        quote (Quote): Quote to be validated.
+
+    Raises:
+        InvalidQuote: If the quote is invalid.
+    """
+    if "Too many requests" in quote.text:
+        raise InvalidQuote()
+
+
 def create_quote(name_provider: str, data: dict[str, Any]) -> Quote:
     """
     Parse quote data from a specified service into a Quote object.
@@ -79,6 +107,7 @@ def create_quote(name_provider: str, data: dict[str, Any]) -> Quote:
 
     Raises:
         NotImplementedError: If the specified service is not yet supported.
+        UnableToParse: If the Parser was unable to parse the data.
     """
     try:
         parser = PARSERS[name_provider]
@@ -86,5 +115,9 @@ def create_quote(name_provider: str, data: dict[str, Any]) -> Quote:
         raise NotImplementedError(
             f"Unknown service: {name_provider}, not implemented yet known parsers: \
             {PARSERS.keys()}")
-
-    return parser(data)
+    try:
+        result = parser(data)
+        validate(result)
+        return result
+    except KeyError:
+        raise UnableToParse()

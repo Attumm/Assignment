@@ -28,8 +28,7 @@ bash script/start.sh
 ```
 
 ### Run
-Run the below, or right click with the browser.
-The below should give js
+Run the below, or right click url for the browser.
 ```bash
 curl http://127.0.0.1:8000
 ```
@@ -40,12 +39,10 @@ http://127.0.0.1:8000/docs
 
 
 ### Extending the app
-Adding new DataProvide quote service
-The o
+Adding new DataProvide quote service.
+The idea that extending the application should be simple and without impacting the result of the application.
 
-
-Within the following file add a new data provider
-
+Within the following file add a new data provider.
 [config.py](src/quote/config.py)
 ```python
 DATA_PROVIDERS = {
@@ -66,7 +63,7 @@ DATA_PROVIDERS = {
     ),
 }
 ```
-Now create an parser.
+Now create a parser.
 
 [parsing.py](src/quote/parsing.py)
 ```python
@@ -95,6 +92,7 @@ def provider_new_data_provider_parsing(data: dict[str, Any]) -> Quote:
     )
 ```
 [parsing.py](src/quote/parsing.py)
+Register the parser
 ```python
 PARSERS = {
     "quotable": provider_quotable_parsing,
